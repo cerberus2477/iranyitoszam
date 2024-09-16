@@ -3,6 +3,7 @@
 namespace App\Html;
 
 use App\Repositories\CountyRepository;
+use App\Repositories\CityRepository;
 
 class Request
 {
@@ -34,39 +35,32 @@ class Request
         $uri = self::getResourceName();
         switch ($uri) {
             case 'counties':
-                $id = self::getResourceId();
-                $repository = new CountyRepository();
-                if ($id) {
-                    $entities = $repository->find($id);
-                } else {
-                    $entities = $repository->getAll();
-                }
-
-                $code = 200;
-                if (empty($entities)) {
-                    $code = 404;
-                }
-                Response::response($entities, $code);
+                self::dolog(new CountyRepository());
                 break;
             case 'cities':
-                $id = self::getResourceId();
-                $repository = new CityRepository();
-                if ($id) {
-                    $entities = $repository->find($id);
-                } else {
-                    $entities = $repository->getAll();
-                }
-
-                $code = 200;
-                if (empty($entities)) {
-                    $code = 404;
-                }
-                Response::response($entities, $code);
+                self::dolog(new CityRepository());
                 break;
             default:
                 Response::response([], 404, "$uri not found");
 
         }
+    }
+
+    //azért hogy DRY legyen, nem tudok még rá értelmes nevet
+    private static function dolog($repo)
+    {
+        $id = self::getResourceId();
+        if ($id) {
+            $entities = $repo->getById($id);
+        } else {
+            $entities = $repo->getAll();
+        }
+
+        $code = 200;
+        if (empty($entities)) {
+            $code = 404;
+        }
+        Response::response($entities, $code);
     }
 
     private static function deleteRequest()

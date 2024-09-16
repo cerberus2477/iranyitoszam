@@ -8,18 +8,33 @@ class BaseRepository extends DB
 {
     protected string $tableName;
 
-    public function create(array $data): ?int
-    {
-        $sql = "INSERT INTO `%s` (%s) VALUES (%s)";
-        $fields = '';
-        $values = '';
-        // foreach ( )
-        // {
+    // public function create(array $data): ?int
+    // {
+    //     $sql = "INSERT INTO `%s` (%s) VALUES (%s)";
+    //     $fields = '';
+    //     $values = '';
+    //     // foreach ( )
+    //     // {
 
-        // }
+    //     // }
+    // }
+
+
+    public function select()
+    {
+        return "SELECT * FROM `{$this->tableName}` ";
     }
 
-    public function find(int $id): array
+
+    public function getAll(): array
+    {
+        $query = $this->select();
+
+        // ". ORDER BY name";
+        return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getById(int $id): array
     {
         $query = $this->select() . " WHERE id=$id";
 
@@ -31,31 +46,24 @@ class BaseRepository extends DB
         return $result;
     }
 
-    public function getAll(): array
+    function deleteById($id)
     {
-        $query = $this->select() . "ORDER BY name";
-
-        return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
+        return $this->mysqli->query("DELETE FROM `{$this->tableName}` WHERE id=$id");
     }
 
-    public function get()
-    {
 
-    }
 
-    public function countAll()
-    {
 
-    }
+    // public function countAll()
+    // {
 
-    public function getCount()
-    {
+    // }
 
-    }
+    // public function getCount()
+    // {
 
-    public function select()
-    {
-        return "SELECT * FROM `{$this->tableName}` ";
-    }
+    // }
+
+
 }
 

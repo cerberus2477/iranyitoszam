@@ -10,8 +10,14 @@ class CountyRepository extends BaseRepository
         $this->tableName = 'counties';
     }
 
-    function delete($id)
-    {
-        return $this->mysqli->query("DELETE FROM counties WHERE id=$id");
-    }
+    //TODO: felülírni orderby-jal
+
+    // public function getAll(): array
+    // {
+    //     $query = $this->select();
+
+    //     // ". ORDER BY name";
+    //     return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
+    // }
+
 }

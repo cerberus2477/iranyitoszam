@@ -48,6 +48,21 @@ class Request
                 }
                 Response::response($entities, $code);
                 break;
+            case 'cities':
+                $id = self::getResourceId();
+                $repository = new CityRepository();
+                if ($id) {
+                    $entities = $repository->find($id);
+                } else {
+                    $entities = $repository->getAll();
+                }
+
+                $code = 200;
+                if (empty($entities)) {
+                    $code = 404;
+                }
+                Response::response($entities, $code);
+                break;
             default:
                 Response::response([], 404, "$uri not found");
 

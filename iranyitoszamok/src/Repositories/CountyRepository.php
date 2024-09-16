@@ -9,4 +9,9 @@ class CountyRepository extends BaseRepository
         parent::__construct($host, $user, $password, $database);
         $this->tableName = 'counties';
     }
+
+    function delete($id)
+    {
+        return $this->mysqli->query("DELETE FROM counties WHERE id=$id");
+    }
 }

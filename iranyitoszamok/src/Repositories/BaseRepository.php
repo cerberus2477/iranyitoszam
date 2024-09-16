@@ -19,6 +19,18 @@ class BaseRepository extends DB
         // }
     }
 
+    public function find(int $id): array
+    {
+        $query = $this->select() . " WHERE id=$id";
+
+        $result = $this->mysqli->query($query)->fetch_assoc();
+        if (!$result) {
+            $result = [];
+        }
+
+        return $result;
+    }
+
     public function getAll(): array
     {
         $query = $this->select() . "ORDER BY name";

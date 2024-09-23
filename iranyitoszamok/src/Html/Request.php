@@ -10,15 +10,15 @@ class Request
     static function handle()
     {
         switch ($_SERVER["REQUEST_METHOD"]) {
-            // case "POST":
-            //     self::postRequest();
-            //     break;
+            case "POST":
+                self::postRequest();
+                break;
             case "GET":
                 self::getRequest();
                 break;
-            // case "PUT":
-            //     self::putRequest();
-            //     break;
+            case "PUT":
+                self::putRequest();
+                break;
             case "DELETE":
                 self::deleteRequest();
                 break;
@@ -30,8 +30,6 @@ class Request
 
     public static function getRequest()
     {
-        // $uri = $_SERVER['REQUEST_URI'];
-
         $uri = self::getResourceName();
         switch ($uri) {
             case 'counties':
@@ -72,7 +70,6 @@ class Request
         $resourceName = self::getResourceName();
         switch ($resourceName) {
             case 'counties':
-                $code = 404;
                 $db = new CountyRepository();
                 $result = $db->delete($id);
                 if ($result) {
@@ -82,9 +79,46 @@ class Request
                     Response::response([], 404);
                 }
         }
-        return;
     }
 
+
+    private static function postRequest()
+    {
+        $resource = self::getResourceName();
+        switch ($resource) {
+            case 'counties':
+                $data = self::getRequestData();
+                if (isset($data['name'])) {
+                    $db = new CountyRepository();
+                    $newId = $db->create($data);
+                    $code = 201;
+                    if (!$newId) {
+                        $code = 400; //Bad request;
+                    }
+                }
+                Response::response($data, $code);
+        }
+    }
+
+    private static function putRequest()
+    {
+        $id = self::getResourceId();
+        if (!$id) {
+            Response::response([], 400, Response::STATUSES[400]);
+        } else {
+            $resource = self::getResourceName();
+            switch ($resource) {
+                case 'counties':
+                    $data = self::getRequestData();
+                    if (isset($data['name'])) {
+                        $db = new CountyRepository();
+                        $result = $db->update($id, $data);
+                        $code = $result ? 200 : 404;
+                    }
+                    Response::response($result, $code);
+            }
+        }
+    }
 
     //szétdarabolja és ha az utolsó szám akkor az utolsó előttit adja vissza
     private static function getResourceName()

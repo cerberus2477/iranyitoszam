@@ -56,3 +56,8 @@ apache portja, htdocson belüli mappa
 
 compser json, futtatjuk az autoloadot, gitignore
 index. phpba kell inclue autoload
+
+
+
+új dolgok/to be reviewed:
+sprintf használata

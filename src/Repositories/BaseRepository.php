@@ -13,7 +13,6 @@ class BaseRepository extends DB
         return "SELECT * FROM `{$this->tableName}`";
     }
 
-
     public function selectAll(): array
     {
         $query = $this->select() . "ORDER BY id;";

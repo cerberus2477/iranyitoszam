@@ -8,18 +8,6 @@ class BaseRepository extends DB
 {
     protected string $tableName;
 
-    // public function insert(array $data): ?int
-    // {
-    //     $sql = "INSERT INTO `%s` (%s) VALUES (%s)";
-    //     $fields = '';
-    //     $values = '';
-    //     // foreach ( )
-    //     // {
-
-    //     // }
-    // }
-
-
     public function select()
     {
         return "SELECT * FROM `{$this->tableName}`";
@@ -95,27 +83,4 @@ class BaseRepository extends DB
 
         return $this->selectById($id);
     }
-
-    public function find(int $id)
-    {
-
-    }
-
-
 }
-
-
-
-// public function countAll()
-// {
-
-// }
-
-// public function getCount()
-// {
-
-// }
-
-
-
-

@@ -2,6 +2,7 @@
 
 namespace App\Html;
 
+use App\Repositories\BaseRepository;
 use App\Repositories\CountyRepository;
 use App\Repositories\CityRepository;
 
@@ -33,10 +34,10 @@ class Request
         $uri = self::getResourceName();
         switch ($uri) {
             case 'counties':
-                self::dolog(new CountyRepository());
+                self::dolog(new BaseRepository("counties"));
                 break;
             case 'cities':
-                self::dolog(new CityRepository());
+                self::dolog(new BaseRepository("cities"));
                 break;
             default:
                 Response::response([], 404, "$uri not found");
@@ -70,7 +71,7 @@ class Request
         $resourceName = self::getResourceName();
         switch ($resourceName) {
             case 'counties':
-                $db = new CountyRepository();
+                $db = new BaseRepository("counties");
                 $result = $db->delete($id);
                 if ($result) {
 
@@ -79,7 +80,7 @@ class Request
                     Response::response([], 404);
                 }
             case 'cities':
-                $db = new CityRepository();
+                $db = new BaseRepository("cities");
                 $result = $db->delete($id);
                 if ($result) {
 
@@ -98,7 +99,7 @@ class Request
             case 'counties':
                 $data = self::getRequestData();
                 if (isset($data['name'])) {
-                    $db = new CountyRepository();
+                    $db = new BaseRepository("counties");
                     $newId = $db->insert($data);
                     $code = 201;
                     if (!$newId) {
@@ -120,7 +121,7 @@ class Request
                 case 'counties':
                     $data = self::getRequestData();
                     if (isset($data['name'])) {
-                        $db = new CountyRepository();
+                        $db = new BaseRepository("counties");
                         $result = $db->update($id, $data);
                         $code = $result ? 200 : 404;
                     }

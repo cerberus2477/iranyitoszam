@@ -1,7 +1,7 @@
 <?php
-namespace App\Repositories;
+//namespace App\Repositories;
 
-class CityRepository extends BaseRepository
+/*class CityRepository extends BaseRepository
 {
 
     function __construct($host = self::HOST, $user = self::USER, $password = self::PASSWORD, $database = self::DATABASE)
@@ -9,4 +9,4 @@ class CityRepository extends BaseRepository
         parent::__construct($host, $user, $password, $database);
         $this->tableName = 'cities';
     }
-}
+} */

@@ -6,6 +6,13 @@ use App\Database\DB;
 
 class BaseRepository extends DB
 {
+
+    function __construct($tableName, $host = self::HOST, $user = self::USER, $password = self::PASSWORD, $database = self::DATABASE)
+    {
+        parent::__construct($host, $user, $password, $database);
+        $this->tableName = $tableName;
+    }
+
     protected string $tableName;
 
     public function select()

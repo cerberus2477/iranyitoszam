@@ -22,21 +22,19 @@ class BaseRepository extends DB
 
     public function select()
     {
-        return "SELECT * FROM `{$this->tableName}` ORDER BY id";
+        return "SELECT * FROM `{$this->tableName}`";
     }
 
 
     public function selectAll(): array
     {
-        $query = $this->select();
-
-        // ". ORDER BY name";
+        $query = $this->select() . "ORDER BY id;";
         return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
     }
 
     public function selectById(int $id): array
     {
-        $query = $this->select() . " WHERE id=$id";
+        $query = $this->select() . " WHERE id = $id;";
 
         $result = $this->mysqli->query($query)->fetch_assoc();
         if (!$result) {

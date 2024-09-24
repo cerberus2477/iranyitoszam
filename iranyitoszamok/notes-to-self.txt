@@ -1,7 +1,0 @@
-cmd - 
-
-C:\xampp\htdocs\TUNDE\iranyitoszamok>php -S localhost:8000
-
-
- composer dump-autoload
-

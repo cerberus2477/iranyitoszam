@@ -1,0 +1,58 @@
+Általános hasznos dolgok:
+
+-CMD-t legyegyszerűbb úgy megynitni, hogy belemegyünk a projekt mappájába fájlkezelőben, belekattintunk a mezőbe felül ahol a fájl path látható és beírjuk hogy cmd. )
+-VSCode-ben úgy lehet megnyitni a projektet, ha a fenti cmd-be ezt írjuk:
+code .
+-vscode-ben cntrl+ü -vel a kijelölt sorokat kikommenteljük/visszavonjuk azt
+-vscode-ben cntrl+shift+ö új terminál ablakot nyit
+
+
+
+Git parancsok:
+
+-git init - új projekt esetén ezt kell először írni, innentől használhatók a git parancsok. (inicializálás)
+
+-"mentésnél": (ajánlott minden új funkciónál/bugfixnél, nem csak egy nagyot a végén)
+git add . 
+git commit -m "üzenet"
+git git push
+
+-git checkout -b branchneve - új branch/meglévő branchre váltás (helyben)
+
+-git pull origin develop
+
+ 
+
+
+API-nál
+1. XAMPP elindítása és szerver elindítása (php -S localhost:8000  - cmdben vagy vscode terminálba)
+
+
+ composer dump-autoload
+
+
+új php projekt lépései:
+1. létrehozzuk a projektmappát és ebbe egy src mappát (ide fogjuk a program fájljait tenni az index.php-n kívül)
+
+2. létrehozunk a projektmappában egy composer.json fájlt. ezt kell belemásolni:
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
+
+App helyére lehet mást is írni, így fogjuk hívni később a namespacekben az src mappát. Ha nem src néven hoztuk létre a belső mappát, akkor azt a nevet kell ide megadni.
+
+3.
+
+
+
+klienset megnyitni
+http://localhost:8085/TUNDE/
+apache portja, htdocson belüli mappa
+
+
+compser json, futtatjuk az autoloadot, gitignore
+index. phpba kell inclue autoload

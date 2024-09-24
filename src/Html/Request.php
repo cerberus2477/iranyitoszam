@@ -78,6 +78,15 @@ class Request
                 } else {
                     Response::response([], 404);
                 }
+            case 'cities':
+                $db = new CityRepository();
+                $result = $db->delete($id);
+                if ($result) {
+
+                    Response::response([], 200);
+                } else {
+                    Response::response([], 404);
+                }
         }
     }
 
@@ -123,7 +132,7 @@ class Request
     //szétdarabolja és ha az utolsó szám akkor az utolsó előttit adja vissza
     private static function getResourceName()
     {
-        $arrUri = explode("/", $_SERVER['REQUEST_URI']);
+        $arrUri = self::getResources();
         $last = $arrUri[count($arrUri) - 1]; //ha egy szam a vege akkor az egy id es elotte erroforras
         if (is_numeric($last)) {
             $last = $arrUri[count($arrUri) - 2];
@@ -131,10 +140,14 @@ class Request
         return $last;
     }
 
+    private static function getResources()
+    {
+        return array_filter(explode("/", trim($_SERVER['REQUEST_URI'], '/')));
+    }
+
     private static function getResourceId()
     {
-        // $arrUri = self::getArrUri($_SERVER('REQUEST.URI'));
-        $arrUri = explode("/", $_SERVER['REQUEST_URI']);
+        $arrUri = self::getResources();
         $last = $arrUri[count($arrUri) - 1];
         if (is_numeric($last)) {
             return $last;

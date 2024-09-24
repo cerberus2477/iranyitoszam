@@ -90,7 +90,7 @@ class Request
                 $data = self::getRequestData();
                 if (isset($data['name'])) {
                     $db = new CountyRepository();
-                    $newId = $db->create($data);
+                    $newId = $db->insert($data);
                     $code = 201;
                     if (!$newId) {
                         $code = 400; //Bad request;

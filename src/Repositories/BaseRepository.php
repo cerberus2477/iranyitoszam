@@ -8,7 +8,7 @@ class BaseRepository extends DB
 {
     protected string $tableName;
 
-    // public function create(array $data): ?int
+    // public function insert(array $data): ?int
     // {
     //     $sql = "INSERT INTO `%s` (%s) VALUES (%s)";
     //     $fields = '';
@@ -52,7 +52,7 @@ class BaseRepository extends DB
     }
 
     //INSERT parancs, új record
-    public function create(array $data)
+    public function insert(array $data)
     {
         $sql = "INSERT INTO `{$this->tableName}` (%s) VALUES (%s)";
         $fields = '';

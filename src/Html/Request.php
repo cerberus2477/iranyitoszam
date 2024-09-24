@@ -87,25 +87,32 @@ class Request
     }
 
 
-    //TODO: post mintájára
-    // private static function putRequest()
-    // {
-    //     $id = self::getResourceId();
-    //     if (!$id) {
-    //         Response::response([], 400, Response::STATUSES[400]);
-    //     } else {
-    //         $resourceName = self::getResourceName();
+    //POSTMAN ERROR
+    private static function putRequest()
+    {
+        $id = self::getResourceId();
+        if (!$id) {
+            Response::response([], 400, Response::STATUSES[400]);
+        } else {
 
-    //         $data = self::getRequestData();
-    //         if (isset($data['name'])) {
-    //             $db = new Repository($resourceName);
-    //             $result = $db->update($id, $data);
-    //             $code = $result ? 200 : 404;
-    //         }
-    //         Response::response($result, $code);
+            $resourceName = self::getResourceName();
+            $data = self::getRequestData();
+            $code = 400;     // Initializing the response code as bad request
+            $db = new Repository($resourceName);
+            $columnNames = $db->getColumnNames();
 
-    //     }
-    // }
+            // Checking if all column names exist in the data
+            $allColumnsPresent = !array_diff($columnNames, array_keys($data));
+            if ($allColumnsPresent) {
+                $result = $db->update($id, $data);
+                $code = $result ? 200 : 404;
+            }
+
+            // Respond with the data and appropriate status code
+            Response::response($data, $code);
+        }
+
+    }
 
     //szétdarabolja és ha az utolsó szám akkor az utolsó előttit adja vissza
     private static function getResourceName()

@@ -2,10 +2,7 @@
 
 namespace App\Html;
 
-use App\Repositories\BaseRepository;
-use App\Repositories\CountyRepository;
-use App\Repositories\CityRepository;
-
+use App\Repositories\Repository;
 class Request
 {
     static function handle()
@@ -32,23 +29,9 @@ class Request
     public static function getRequest()
     {
         $uri = self::getResourceName();
-        switch ($uri) {
-            case 'counties':
-                self::dolog(new BaseRepository("counties"));
-                break;
-            case 'cities':
-                self::dolog(new BaseRepository("cities"));
-                break;
-            default:
-                Response::response([], 404, "$uri not found");
-
-        }
-    }
-
-    //azért hogy DRY legyen, nem tudok még rá értelmes nevet
-    private static function dolog($repo)
-    {
+        $repo = new Repository($uri);
         $id = self::getResourceId();
+
         if ($id) {
             $entities = $repo->selectById($id);
         } else {
@@ -58,6 +41,7 @@ class Request
         $code = 200;
         if (empty($entities)) {
             $code = 404;
+            // $message = "$uri not found";
         }
         Response::response($entities, $code);
     }
@@ -69,66 +53,59 @@ class Request
             Response::response([], 400, Response::STATUSES[400]);
         }
         $resourceName = self::getResourceName();
-        switch ($resourceName) {
-            case 'counties':
-                $db = new BaseRepository("counties");
-                $result = $db->delete($id);
-                if ($result) {
-
-                    Response::response([], 200);
-                } else {
-                    Response::response([], 404);
-                }
-            case 'cities':
-                $db = new BaseRepository("cities");
-                $result = $db->delete($id);
-                if ($result) {
-
-                    Response::response([], 200);
-                } else {
-                    Response::response([], 404);
-                }
+        $db = new Repository($resourceName);
+        $result = $db->delete($id);
+        if ($result) {
+            Response::response([], 200);
+        } else {
+            Response::response([], 404);
         }
     }
 
 
+    //TODO: most lehet pl olyat hogy POST 
     private static function postRequest()
     {
-        $resource = self::getResourceName();
-        switch ($resource) {
-            case 'counties':
-                $data = self::getRequestData();
-                if (isset($data['name'])) {
-                    $db = new BaseRepository("counties");
-                    $newId = $db->insert($data);
-                    $code = 201;
-                    if (!$newId) {
-                        $code = 400; //Bad request;
-                    }
-                }
-                Response::response($data, $code);
-        }
-    }
 
-    private static function putRequest()
-    {
-        $id = self::getResourceId();
-        if (!$id) {
-            Response::response([], 400, Response::STATUSES[400]);
-        } else {
-            $resource = self::getResourceName();
-            switch ($resource) {
-                case 'counties':
-                    $data = self::getRequestData();
-                    if (isset($data['name'])) {
-                        $db = new BaseRepository("counties");
-                        $result = $db->update($id, $data);
-                        $code = $result ? 200 : 404;
-                    }
-                    Response::response($result, $code);
+        $resourceName = self::getResourceName();
+        $data = self::getRequestData();
+        $code = 400;     // Initializing the response code as bad request
+        $db = new Repository($resourceName);
+        $columnNames = $db->getColumnNames();
+
+        // Checking if all column names exist in the data
+        $allColumnsPresent = !array_diff($columnNames, array_keys($data));
+        if ($allColumnsPresent) {
+            $newId = $db->insert($data);
+            if ($newId) {
+                $code = 201;
             }
         }
+
+        // Respond with the data and appropriate status code
+        Response::response($data, $code);
     }
+
+
+    //TODO: post mintájára
+    // private static function putRequest()
+    // {
+    //     $id = self::getResourceId();
+    //     if (!$id) {
+    //         Response::response([], 400, Response::STATUSES[400]);
+    //     } else {
+    //         $resourceName = self::getResourceName();
+
+    //         $data = self::getRequestData();
+    //         if (isset($data['name'])) {
+    //             $db = new Repository($resourceName);
+    //             $result = $db->update($id, $data);
+    //             $code = $result ? 200 : 404;
+    //         }
+    //         Response::response($result, $code);
+
+    //     }
+    // }
 
     //szétdarabolja és ha az utolsó szám akkor az utolsó előttit adja vissza
     private static function getResourceName()

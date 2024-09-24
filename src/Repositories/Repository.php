@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Database\DB;
 
-class BaseRepository extends DB
+class Repository extends DB
 {
 
     function __construct($tableName, $host = self::HOST, $user = self::USER, $password = self::PASSWORD, $database = self::DATABASE)
@@ -19,6 +19,19 @@ class BaseRepository extends DB
     {
         return "SELECT * FROM `{$this->tableName}`";
     }
+
+    public function getColumnNames()
+    {
+        $query = "SELECT COLUMN_NAME
+              FROM INFORMATION_SCHEMA.COLUMNS
+              WHERE TABLE_NAME = '{$this->tableName}'
+              AND COLUMN_KEY != 'PRI';"; // Exclude primary key column like 'id'
+
+        $columns = $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
+        $columnNames = array_column($columns, 'COLUMN_NAME');
+        return $columnNames;
+    }
+
 
     public function selectAll(): array
     {

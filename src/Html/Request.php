@@ -49,9 +49,9 @@ class Request
     {
         $id = self::getResourceId();
         if ($id) {
-            $entities = $repo->getById($id);
+            $entities = $repo->selectById($id);
         } else {
-            $entities = $repo->getAll();
+            $entities = $repo->selectAll();
         }
 
         $code = 200;

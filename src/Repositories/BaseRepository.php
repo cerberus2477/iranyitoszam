@@ -22,11 +22,11 @@ class BaseRepository extends DB
 
     public function select()
     {
-        return "SELECT * FROM `{$this->tableName}` ";
+        return "SELECT * FROM `{$this->tableName}` ORDER BY id";
     }
 
 
-    public function getAll(): array
+    public function selectAll(): array
     {
         $query = $this->select();
 
